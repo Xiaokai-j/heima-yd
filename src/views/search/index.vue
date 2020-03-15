@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-      搜索模块
+
        <!-- 搜索组件一级路由   返回上一个页面-->
        <!-- @click-left  点击左侧事件 -->
        <!-- $router.back()  返回上一页 -->
