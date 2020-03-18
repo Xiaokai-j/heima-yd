@@ -19,51 +19,39 @@ const article = () => import('@/views/article') // 文章中心
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'Home',
     component: Layout, // 布局组件 一级路由
-    children: [
-      {
-        path: '',
-        component: home
-      },
-      {
-        // 问答组件
-        path: '/question',
-        component: question
-      }, {
-        // 视频组件
-        path: '/video',
-        component: video
-      }, {
-        path: '/user',
-        component: user
-      }]
+    children: [{
+      path: '', // 如果path什么都不写 默认就是二级路由的默认组件
+      component: home
+    }, {
+      path: '/question',
+      component: question // 问答组件
+    }, {
+      path: '/video',
+      component: video // 视频组件
+    }, {
+      path: '/user',
+      component: user
+    }]
   }, {
-    // 一级路由 小智同学
-    path: '/user/chat',
+    path: '/user/chat', // 一级路由 小智同学
     component: chat
   }, {
-    // 一级路由 登录
     path: '/login',
-    component: login
+    component: login // 一级路由 登录
   }, {
-    // 一级路由编辑资料
     path: '/user/profile',
-    component: profile
+    component: profile // 一级路由编辑资料
   }, {
-    // 一级路由搜索中心
     path: '/search',
-    component: search
+    component: search // 一级路由 搜索中心
   }, {
     path: '/search/result',
-    component: searchresult
-  }, {
-    // 一级路由 文章详情
-    path: '/article',
-    component: article
+    component: searchresult // 一级路由搜索中心
   }, {
     path: '/article',
-    component: article
+    component: article // 一级路由 文章详情
   }
 
 ]

@@ -5,7 +5,7 @@ import store from './store'
 // 引入vant组件库
 import Vant from 'vant'
 // 引入vant组件 样式
-import 'vant/lib/index.css'
+import 'vant/lib/index.less'
 // 引入
 import 'amfe-flexible'
 // 引入less样式
