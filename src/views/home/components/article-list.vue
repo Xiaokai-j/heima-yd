@@ -13,7 +13,34 @@
       <van-list finished-text="没有了" v-model="upLoading" :finished="finished" @load="onLoad">
         <!-- 循环内容 -->
         <van-cell-group>
-          <van-cell v-for="item in articles" :key="item" title="1123" value="789+item"></van-cell>
+          <van-cell v-for="item in articles" :key="item" title="1123" value="789+item">
+            <!--放置元素 文章列表的循环项 无图、单图、三图-->
+            <!-- 三图 -->
+            <div class="article_item">
+              <h3 class="van-ellipsis">PullRefresh下拉刷新PullRefresh下拉刷新下拉刷新下拉刷新</h3>
+             <!-- 三图 -->
+              <div class="img_box">
+                  <!-- 图片组件用的是vant的组件 需要使用该组件 进行图片懒加载 -->
+                <van-image class="w100" fit="cover" src="https://img.yzcdn.cn/vant/cat.jpeg" />
+                <van-image class="w100" fit="cover" src="https://img.yzcdn.cn/vant/cat.jpeg" />
+                <van-image class="w100" fit="cover" src="https://img.yzcdn.cn/vant/cat.jpeg" />
+              </div>
+              <!-- 单图 -->
+              <!-- <div class="img_box">
+                <van-image class="w100" fit="cover" src="https://img.yzcdn.cn/vant/cat.jpeg" />
+              </div> -->
+              <!-- 作者信息 -->
+              <div class="info_box">
+                <span>你像一阵风</span>
+                <span>8评论</span>
+                <span>10分钟前</span>
+                <span class="close">
+                  <van-icon name="cross"></van-icon>
+                </span>
+              </div>
+            </div>
+
+          </van-cell>
         </van-cell-group>
       </van-list>
     </van-pull-refresh>
@@ -40,8 +67,9 @@ export default {
         //   如果此时记录大于50
         this.finished = true
       } else {
-        const arr = Array.from(Array(10), (value, index) => this.articles.length + index + 1
-
+        const arr = Array.from(
+          Array(10),
+          (value, index) => this.articles.length + index + 1
         )
         //   上拉加载不是覆盖之前的数据应该把数据追加到数组的队尾+
         this.articles.push(...arr)
@@ -60,7 +88,10 @@ export default {
       // 触发下拉刷新
       console.log('下拉刷新')
       setTimeout(() => {
-        const arr = Array.from(Array(2), (value, index) => ('追加' + (index + 1)))
+        const arr = Array.from(
+          Array(2),
+          (value, index) => '追加' + (index + 1)
+        )
         this.articles.unshift(...arr) // 将数据添加到队首
         this.downLoading = false // 关掉下拉状态
         this.refreshSuccessText = `更新了${arr.length}条数据`
@@ -70,5 +101,45 @@ export default {
 }
 </script>
 
-<style>
+<style lang='less' scoped>
+.article_item {
+  h3 {
+    font-weight: normal;
+    line-height: 2;
+  }
+  .img_box {
+    display: flex;
+    justify-content: space-between;
+    .w33 {
+      width: 33%;
+      height: 90px;
+    }
+    .w100 {
+      width: 100%;
+      height: 180px;
+    }
+  }
+  .info_box {
+    color: #999;
+    line-height: 2;
+    position: relative;
+    font-size: 12px;
+    span {
+      padding-right: 10px;
+      &.close {
+        border: 1px solid #ddd;
+        border-radius: 2px;
+        line-height: 15px;
+        height: 12px;
+        width: 16px;
+        text-align: center;
+        padding-right: 0;
+        font-size: 8px;
+        position: absolute;
+        right: 0;
+        top: 7px;
+      }
+    }
+  }
+}
 </style>
