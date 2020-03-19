@@ -118,6 +118,7 @@ export default {
     },
     // 下拉刷新
     async onRefresh () {
+      await this.$sleep() // 认为控制
       // 触发下拉刷新
       // 下拉刷新永远拉取的是最新的数据
       const data = await getArticles({
