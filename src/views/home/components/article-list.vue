@@ -13,18 +13,18 @@
       <van-list finished-text="没有了" v-model="upLoading" :finished="finished" @load="onLoad">
         <!-- 循环内容 -->
         <van-cell-group>
-          <van-cell v-for="item in articles" :key="item" >
+          <van-cell v-for="item in articles" :key="item.art_id.toString()">
             <!--放置元素 文章列表的循环项 无图、单图、三图-->
             <!-- 三图 -->
             <div class="article_item">
                 <h3 class="van-ellipsis">{{item.title}}</h3>
               <!-- <h3 class="van-ellipsis">PullRefresh下拉刷新PullRefresh下拉刷新下拉刷新下拉刷新</h3> -->
              <!-- 三图 -->
-              <div class="img_box" v-if="item.cover.type===3">
+              <div class="img_box" v-if="item.cover.type === 3">>
                   <!-- 图片组件用的是vant的组件 需要使用该组件 进行图片懒加载 -->
-                <van-image class="w100" fit="cover" :src="item.cover.images[0]" />
-                <van-image class="w100" fit="cover" :src="item.cover.images[1]"/>
-                <van-image class="w100" fit="cover" :src="item.cover.images[2]" />
+                <van-image class="w33" fit="cover" :src="item.cover.images[0]" />
+                <van-image class="w33" fit="cover" :src="item.cover.images[1]"/>
+                <van-image class="w33" fit="cover" :src="item.cover.images[2]" />
               </div>
 
               <!-- 单图 暂时隐藏掉单图-->
@@ -99,12 +99,12 @@ export default {
       //   //   setTimeout(() => {
       //   //     this.finished = true // 表示 数据已经全部加载完毕 没有数据了
       //   //   }, 1000) // 等待一秒 然后关闭加载状态
-
+      // await this.$sleep() // 人为控制了 请求的时间
       // this.timestamp || Date.now()  如果有历史时间戳 用历史时间戳 否则用当前时间戳
       //   channel_id:  指的是当前频道
       const data = await getArticles({ channel_id: this.channel_id, timestamp: this.timestamp || Date.now() }) // this.channel_id指的是 当前的频道id
       //  获取内容
-      this.articles.push(data.results) // 将数据追加到队尾
+      this.articles.push(...data.results) // 将数据追加到队尾
       this.upLoading = false // 关闭加载状态
       // 将历史时间戳 给timestamp  但是 赋值之前有个判断 需要判断一个历史时间是否为0
       // 如果历史时间戳为 0 说明 此时已经没有数据了 应该宣布 结束   finished true
@@ -118,40 +118,44 @@ export default {
     },
     // 下拉刷新
     async onRefresh () {
-      await this.$sleep() // 认为控制
       // 触发下拉刷新
       // 下拉刷新永远拉取的是最新的数据
       const data = await getArticles({
         channel_id: this.channel_id,
         timestamp: Date.now() // 永远刷新最新的时间戳
       })
+      // 手动的关闭 下拉刷新的状态
+      this.downLoading = false
+      // 需要判断 最新的时间戳能否换来的数据啊  如果能换来数据 把新数据整个替换旧数据 如果不能  就告诉大家 暂时没有更新
       if (data.results.length) {
-        // 如果长度大于0 表示有数据
-        this.articles = data.results // 将历史数据全都覆盖掉了
-        // 假如你之前 已经将 上拉加载设置成finished设置成true了
-        // 表示 我们还需要继续往下拉 就需要把原来的状态再次打开
-        this.finished = false
-        // 注意我们依然需要获取此次的历史事件戳
-        this.timestamp = data.pre_timestamp // 赋值历史时间戳 因为当你下拉刷新之后 上拉加载的时候 要用到这个历史事件戳
-        this.refreshSuccessText = `更新了${data.results.length}条数据`
+        // 如果有返回数据
+        // 需要将整个的articles替换
+        this.articles = data.results // 历史数据全部被覆盖
+        // 此时你 已经之前的全部数据覆盖了 假如 你之前把数据拉到了低端 也就意味着 你之前的finished已经为true了
+        if (data.pre_timestamp) {
+          // 因为下拉刷新 换来了一拨新的数据 里面 又有历史时间戳
+          this.finished = false // 重新唤醒列表 让列表可以继续上拉加载
+          this.timestamp = data.pre_timestamp // 记录历史时间戳给变量
+        }
+        this.successText = `更新了${data.results.length}条数据`
       } else {
-      //  如果没有数据更新  什么都不需要变化
-        this.refreshSuccessText = '已是最新数据'
+        // 如果换不来新数据
+        this.successText = '当前已经是最新了'
       }
+
+      // 需要判断最新的时间戳
+
+      // console.log('下拉刷新')
+      // setTimeout(() => {
+      //   const arr = Array.from(
+      //     Array(2),
+      //     (value, index) => '追加' + (index + 1)
+      //   )
+      //   this.articles.unshift(...arr) // 将数据添加到队首
+      //   this.downLoading = false // 关掉下拉状态
+      //   this.refreshSuccessText = `更新了${arr.length}条数据`
+      // }, 1000)
     }
-    // 需要判断最新的时间戳
-
-    // console.log('下拉刷新')
-    // setTimeout(() => {
-    //   const arr = Array.from(
-    //     Array(2),
-    //     (value, index) => '追加' + (index + 1)
-    //   )
-    //   this.articles.unshift(...arr) // 将数据添加到队首
-    //   this.downLoading = false // 关掉下拉状态
-    //   this.refreshSuccessText = `更新了${arr.length}条数据`
-    // }, 1000)
-
   }
 }
 </script>
