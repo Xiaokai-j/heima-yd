@@ -66,7 +66,7 @@ export default {
   width: 36px;
   height: 35px;
   position: absolute;
-  top: 0;
+  top: 5%;
   right: 0;
   &::before {
     content: "";
