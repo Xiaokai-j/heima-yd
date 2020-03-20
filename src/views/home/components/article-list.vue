@@ -37,6 +37,8 @@
                 <div class="info_box">
                 <span>{{ item.aut_name }}</span>
                 <span>{{ item.comm_count }}评论</span>
+                <!-- 使用过滤器 -->
+                <!-- <span>{{ article.pubdate | relTime }}</span> -->
                 <span>{{ item.pubdate }}</span>
                 <span class="close">
                   <van-icon name="cross"></van-icon>
