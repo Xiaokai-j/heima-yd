@@ -21,8 +21,8 @@
               <!-- <h3 class="van-ellipsis">PullRefresh下拉刷新PullRefresh下拉刷新下拉刷新下拉刷新</h3> -->
              <!-- 三图 -->
               <div class="img_box" v-if="item.cover.type === 3">>
-                  <!-- 图片组件用的是vant的组件 需要使用该组件 进行图片懒加载 -->
-               <!--  -->
+               <!-- 图片组件用的是vant的组件 需要使用该组件 进行图片懒加载 -->
+               <!-- 设置`lazy-load`属性来开启图片懒加载， -->
                 <van-image lazy-load class="w33" fit="cover" :src="item.cover.images[0]" />
                 <van-image lazy-load class="w33" fit="cover" :src="item.cover.images[1]"/>
                 <van-image lazy-load class="w33" fit="cover" :src="item.cover.images[2]" />
@@ -35,18 +35,21 @@
               </div>
 
               <!-- 作者信息 -->
-                <div class="info_box">
+             <div class="info_box">
                 <span>{{ item.aut_name }}</span>
                 <span>{{ item.comm_count }}评论</span>
                 <!-- 使用过滤器 -->
-                <!-- <span>{{ article.pubdate | relTime }}</span> -->
-                <span>{{ item.pubdate }}</span>
-                <span class="close">
+                <span>{{item.pubdate}}</span>
+                <!-- 此叉号的显示 应该根据当前的登录状态来判断 如果登录了 可以显示 如果没有登录 不显示 -->
+                <!-- 最原始方式 -->
+                <!-- <span class="close" v-if="$store.state.user.token"> -->
+               <!-- 辅助函数的形式 -->
+               <!-- @事件名="逻辑处理"  点击事件中触发一个 显示反馈的事件-->
+               <span @click="$emit('showAction')" class="close" v-if="user.token">
                   <van-icon name="cross"></van-icon>
                 </span>
               </div>
             </div>
-
           </van-cell>
         </van-cell-group>
       </van-list>
@@ -57,7 +60,12 @@
 <script>
 // 引入获取文章模块
 import { getArticles } from '@/api/articles'
+import { mapState } from 'vuex'
 export default {
+  computed: {
+    ...mapState(['user']) // 将user对象映射到计算属性中
+  },
+
   data () {
     return {
       refreshSuccessText: '',
@@ -80,7 +88,7 @@ export default {
     // onLoad 是会自动执行
     // 上拉加载
     async onLoad () {
-      console.log('开始加载数据')
+      // console.log('开始加载数据')
       //   如果数据已经加载完毕应该把finished设置为true
       //
       //   if (this.articles.length > 50) {
@@ -111,6 +119,7 @@ export default {
       this.upLoading = false // 关闭加载状态
       // 将历史时间戳 给timestamp  但是 赋值之前有个判断 需要判断一个历史时间是否为0
       // 如果历史时间戳为 0 说明 此时已经没有数据了 应该宣布 结束   finished true
+      console.log(this.articles)
       if (data.pre_timestamp) {
         // 如果有历史时间戳 表示 还有数据可以继续进行加载
         this.timestamp = data.pre_timestamp
@@ -163,7 +172,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang="less" scoped>
 .article_item {
   h3 {
     font-weight: normal;

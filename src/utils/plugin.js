@@ -4,11 +4,19 @@
  * ***/
 // 安装dayjs插件 npm i dayjs -S
 // 封装一个相对时间函数
-import dayjs from 'dayjs' // 引入dayjs插件
-import 'dayjs/locale/zh-cn'// dayjs 不会自动引入语言包
-import relativeTime from 'dayjs/plugin/relativeTime'// 引入相对时间插件
+// import dayjs from 'dayjs' // 引入dayjs插件
+// import 'dayjs/locale/zh-cn'// dayjs 不会自动引入语言包 默认只支持英文语言包
+// import relativeTime from 'dayjs/plugin/relativeTime'// 引入相对时间插件
 
-// 相当于dayjs扩展
+// // 相当于dayjs扩展
+// dayjs.extend(relativeTime)
+// 引入dayjs
+import dayjs from 'dayjs'
+// 引入相对时间插件
+import relativeTime from 'dayjs/plugin/relativeTime'
+// 引入语言包
+import 'dayjs/locale/zh-cn'
+// dayjs扩展相对时间的方法
 dayjs.extend(relativeTime)
 
 export default {
@@ -46,9 +54,18 @@ function sleep (time = 500) {
  *
  * ****/
 // 转化时间到相对时间
+// function relTimee (date) {
+//   // from中的是 日期 或者  dayjs得到的日期
+//   // dayjs()当前时间
+//   // dayjs().from(date) 当前时间距离传入时间有多远
+//   return dayjs().locale('zh-cn').from(date)
+// }
+
+/** 相对时间的处理 */
+// date 是传入的日期
 function relTime (date) {
-  // from中的是 日期 或者  dayjs得到的日期
-  // dayjs()当前时间
-  // dayjs().from(date) 当前时间距离传入时间有多远
+  // dayjs是当前时间
+  // from中是传入时间
+  // locale 语言转换
   return dayjs().locale('zh-cn').from(date)
 }

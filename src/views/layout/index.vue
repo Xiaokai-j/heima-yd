@@ -1,19 +1,18 @@
 <template>
   <div class="container">
-      公用布局
       <!--导航组件 采用vant的导航组件 来实现 -->
       <!--当页面地址是/user 的时候 应该隐藏导航栏 否则不隐藏  -->
       <!-- @事件名="逻辑" -->
-      <van-nav-bar @click-right="$router.push('/search')"  fixed title="黑马头条" right-text="搜索" v-if="$router.path!=='/user'"></van-nav-bar>
+      <van-nav-bar @click-right="$router.push('/search')"  fixed title="黑马头条" right-text="搜索" v-if="showNavBar"></van-nav-bar>
        <!-- 二级路由容器  首页/问答/视频/我的-->
        <!-- 判断当前的地址 如果是/user 就给一个 noTop Class -->
        <!-- :class="{ 名称: 布尔值 }" -->
-    <div class="my-wrapper" :class="{noTop:$router.path!=='/user'}">
+    <div class="my-wrapper" :class="{ noTop: !showNavBar }">
       <router-view></router-view>
     </div>
     <!-- 标签栏组件 -->
     <!-- route 表示开启路由模式 -->
-      <van-tabbar route>
+    <van-tabbar route>
       <!-- router-link  to  -->
       <!-- 点击标签栏跳转事件 to="/"-->
       <!-- van-tabbar-item 可以当作 router-link 使用 -->
@@ -27,7 +26,13 @@
 
 <script>
 export default {
-
+  computed: {
+    // 是否显示navbar
+    showNavBar () {
+      // this  指向 组件实例
+      return this.$route.path !== '/user'
+    }
+  }
 }
 </script>
 
@@ -36,7 +41,6 @@ export default {
   width: 100%;
   height: 100%;
   position: relative;
-//   控制二级路由容器高宽
   .my-wrapper{
     width: 100%;
     height: 100%;
